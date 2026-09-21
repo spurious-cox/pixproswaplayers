@@ -54,6 +54,10 @@ Developer ID and installs to `/Applications`.
 
 The icon is built from the master artwork with `pixpro_icon SwapLayers`.
 
+## Problems or suggestions
+
+Open an issue: https://github.com/spurious-cox/pixproswaplayers/issues
+
 ## License
 
 MIT. See LICENSE.

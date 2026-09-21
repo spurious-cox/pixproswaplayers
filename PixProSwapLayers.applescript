@@ -21,14 +21,10 @@
 -- The swapping itself is unchanged, including its handling of layers that sit
 -- in different groups.
 
-property scriptVersion : "3.1.0"
+property scriptVersion : "3.2.0"
 property kPixIDs : {"com.apple.pixelmator", "com.pixelmatorteam.pixelmator.x"}
 -- Set by pixTarget() before anything talks to Pixelmator.
 property pixApp : ""
--- How long to wait for a selection before giving up, and how long to let one
--- settle once two layers are selected, in seconds.
-property kWaitSeconds : 60
-property kSettleSeconds : 1.5
 on pixTarget()
 	set rawPaths to {}
 	try
@@ -143,30 +139,19 @@ on run
 				-- Instead Pixelmator is brought forward and the selection is
 				-- watched, so the layers can be picked normally and the swap
 				-- happens as soon as two of them are.
+				-- With fewer than two layers selected it says so and stops.
+				--
+				-- WAITING WAS TRIED THREE TIMES AND DOES NOT WORK HERE. A
+				-- dialog of this app's own takes the focus the moment it
+				-- appears, so the layers cannot be clicked; a notification
+				-- instead is silent when notifications are switched off, and
+				-- the app then sits there invisibly; and an app that sits
+				-- there swallows the NEXT launch, because macOS will not start
+				-- a second copy — so clicking it again appears to do nothing
+				-- at all. Finishing immediately is the only behaviour that is
+				-- always visible and always leaves a clean slate.
 				if pairCount < 2 then
-					tell application pixApp to activate
-					try
-						display notification "Select two or more layers — they will swap as soon as you do." with title my dialogTitle()
-					end try
-					set giveUpAt to (current date) + kWaitSeconds
-					repeat while (current date) < giveUpAt
-						delay 0.5
-						set chosen to selected layers
-						set pairCount to (count of chosen)
-						if pairCount ≥ 2 then
-							-- A moment to finish a selection that is still
-							-- being added to, so three layers are not swapped
-							-- as two.
-							delay kSettleSeconds
-							set chosen to selected layers
-							set pairCount to (count of chosen)
-							exit repeat
-						end if
-					end repeat
-				end if
-
-				if pairCount < 2 then
-					my alertUser("No two layers were selected, so nothing was swapped.")
+					my alertUser("Select two or more layers in Pixelmator Pro, then run PixProSwapLayers again." & return & return & "Selected now: " & (pairCount as text))
 					return
 				end if
 

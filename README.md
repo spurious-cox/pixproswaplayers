@@ -10,15 +10,14 @@ and stays where it is.
 Select two or more layers in Pixelmator Pro and run it. Nothing to answer — it
 swaps and gets out of the way.
 
-Run it with fewer than two selected and it waits instead of refusing:
-Pixelmator comes to the front, a notification says what it is waiting for, and
-the swap happens as soon as two layers are selected. It gives up after a
-minute. There is deliberately no dialog while it waits — a dialog belonging to
-this app takes the focus the moment it appears, and the layers could not be
-clicked.
+Run it with fewer than two selected and it says so — "Select two or more
+layers in Pixelmator Pro, then run PixProSwapLayers again" — and quits.
 
-Layers in different groups are handled: each one keeps to its own parent's
-ordering, which is what `index` counts in.
+It deliberately does not wait while you select. A dialog of its own takes the
+focus the moment it appears, so the layers cannot be clicked; a notification
+instead is silent if notifications are switched off; and an app left waiting
+swallows the next launch, because macOS will not start a second copy. Finishing
+immediately is the only behavior that is always visible.
 
 ## What changed in 2.0.0
 

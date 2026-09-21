@@ -10,6 +10,13 @@ and stays where it is.
 Select two or more layers in Pixelmator Pro and run it. Nothing to answer — it
 swaps and gets out of the way.
 
+Run it with fewer than two selected and it waits instead of refusing:
+Pixelmator comes to the front, a notification says what it is waiting for, and
+the swap happens as soon as two layers are selected. It gives up after a
+minute. There is deliberately no dialog while it waits — a dialog belonging to
+this app takes the focus the moment it appears, and the layers could not be
+clicked.
+
 Layers in different groups are handled: each one keeps to its own parent's
 ordering, which is what `index` counts in.
 

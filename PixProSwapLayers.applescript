@@ -21,10 +21,14 @@
 -- The swapping itself is unchanged, including its handling of layers that sit
 -- in different groups.
 
-property scriptVersion : "3.0.0"
+property scriptVersion : "3.1.0"
 property kPixIDs : {"com.apple.pixelmator", "com.pixelmatorteam.pixelmator.x"}
 -- Set by pixTarget() before anything talks to Pixelmator.
 property pixApp : ""
+-- How long to wait for a selection before giving up, and how long to let one
+-- settle once two layers are selected, in seconds.
+property kWaitSeconds : 60
+property kSettleSeconds : 1.5
 on pixTarget()
 	set rawPaths to {}
 	try
@@ -132,21 +136,39 @@ on run
 				-- selection again when Swap is clicked.
 				set chosen to selected layers
 				set pairCount to (count of chosen)
-				repeat while pairCount < 2
-					set prompt_ to "Select two or more layers in Pixelmator Pro, then click Swap."
-					set prompt_ to prompt_ & return & return & "Selected now: " & (pairCount as text)
-					-- PIXELMATOR is brought to the front, not this app. The
-					-- dialog belongs to a background application, so it sits on
-					-- top while Pixelmator keeps the keyboard and mouse and the
-					-- layers can actually be clicked. Activating ourselves
-					-- first — which is what every other dialog here does —
-					-- left the user staring at a dialog asking them to select
-					-- layers they were not allowed to touch.
+				-- NO DIALOG while we wait. A dialog put up by this app takes
+				-- the focus the moment it appears, however carefully
+				-- Pixelmator is activated first, and the layers cannot be
+				-- clicked while it is there — the user could only cancel.
+				-- Instead Pixelmator is brought forward and the selection is
+				-- watched, so the layers can be picked normally and the swap
+				-- happens as soon as two of them are.
+				if pairCount < 2 then
 					tell application pixApp to activate
-					display dialog prompt_ buttons {"Cancel", "Swap"} default button "Swap" cancel button "Cancel" with title my dialogTitle()
-					set chosen to selected layers
-					set pairCount to (count of chosen)
-				end repeat
+					try
+						display notification "Select two or more layers — they will swap as soon as you do." with title my dialogTitle()
+					end try
+					set giveUpAt to (current date) + kWaitSeconds
+					repeat while (current date) < giveUpAt
+						delay 0.5
+						set chosen to selected layers
+						set pairCount to (count of chosen)
+						if pairCount ≥ 2 then
+							-- A moment to finish a selection that is still
+							-- being added to, so three layers are not swapped
+							-- as two.
+							delay kSettleSeconds
+							set chosen to selected layers
+							set pairCount to (count of chosen)
+							exit repeat
+						end if
+					end repeat
+				end if
+
+				if pairCount < 2 then
+					my alertUser("No two layers were selected, so nothing was swapped.")
+					return
+				end if
 
 				-- Outermost pair inwards: first with last, second with second
 				-- to last. An odd layer in the middle has no partner and stays

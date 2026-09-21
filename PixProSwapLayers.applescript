@@ -1,25 +1,19 @@
--- PixProSwapLayers — exchange the stacking order of the selected layers
---
--- Called PixProSwap until 2026-09-21; renamed once it was clear the name had
--- to say WHAT it swaps.
+-- PixProSwapLayers 3.2.0 — exchange the stacking order of the selected layers
 --
 -- The first selected layer trades places with the last, the second with the
--- second to last, and so on. Two layers simply swap.
+-- second to last. An odd layer in the middle has no partner and stays put.
+-- Layers in different groups are handled: `index` counts within a layer's own
+-- parent, so each move names that parent, and when the two layers do not share
+-- one, the second move goes `before` the old position rather than `after`.
 --
--- Rewritten 2026-09-21 from version 1.3, which was an Automator application
--- wrapping a Run AppleScript action. What that cost:
+-- Fewer than two layers selected: it says so and finishes. It does not wait.
+-- A dialog of this app's own takes the focus the moment it appears, so the
+-- layers cannot be clicked; a notification instead is silent when
+-- notifications are off; and an app left waiting swallows the next launch,
+-- because macOS will not start a second copy of it.
 --
---   * It opened with `tell application "Pixelmator Pro"`, a name resolved when
---     the workflow was SAVED. Since the Creator Studio rebrand that name can
---     be the wrong copy, or one with no document open.
---   * `opt_debug` was left switched on, so it stopped at four dialogs —
---     "Case 1 repair: order swap" and friends — on the way through a swap.
---   * The Automator stub is unsigned and its identifier was Apple's, with the
---     app's name misspelled inside it: com.apple.automator.PixProwSwap.
---     Gatekeeper rejects it outright.
---
--- The swapping itself is unchanged, including its handling of layers that sit
--- in different groups.
+-- One version number: this property is what the dialogs show, and build.sh
+-- reads it for the bundle, so the two cannot disagree.
 
 property scriptVersion : "3.2.0"
 property kPixIDs : {"com.apple.pixelmator", "com.pixelmatorteam.pixelmator.x"}

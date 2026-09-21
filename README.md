@@ -1,14 +1,30 @@
-# PixProSwapLayers
+# PixProSwapLayers 3.2.0
 
 Exchanges the stacking order of the selected Pixelmator Pro layers. The first
 selected layer trades places with the last, the second with the second to last,
 and so on; two layers simply swap. An odd layer in the middle has no partner
 and stays where it is.
 
+### [⬇︎ Download the latest release](https://github.com/spurious-cox/pixproswaplayers/releases/latest)
+
+Notarized and stapled by Apple — open the DMG and drag PixProSwapLayers to
+Applications, or install it with Homebrew:
+
+```
+brew install --cask spurious-cox/tap/pixproswaplayers
+```
+
+Requires Pixelmator Pro and macOS 26 or later. Both the 3.x build and the
+Creator Studio build work; the app binds to whichever one is in front or has a
+document open.
+
 ## Using it
 
 Select two or more layers in Pixelmator Pro and run it. Nothing to answer — it
 swaps and gets out of the way.
+
+Layers inside groups are handled: each keeps to its own parent's ordering,
+which is what the layer index counts in.
 
 Run it with fewer than two selected and it says so — "Select two or more
 layers in Pixelmator Pro, then run PixProSwapLayers again" — and quits.
@@ -19,23 +35,12 @@ instead is silent if notifications are switched off; and an app left waiting
 swallows the next launch, because macOS will not start a second copy. Finishing
 immediately is the only behavior that is always visible.
 
-## What changed in 2.0.0
+## One version number
 
-Version 1.3 was an Automator application wrapping a Run AppleScript action.
-Three things came with that:
-
-- It opened with `tell application "Pixelmator Pro"`, a name resolved when the
-  workflow was saved. Since the Creator Studio rebrand that name can be the
-  wrong copy, or one with no document open. It now finds the running
-  Pixelmator by bundle id, preferring the frontmost and then any with a
-  document open — so both the 3.x build and Creator Studio work.
-- Its debugging switch was left on, so it stopped at four dialogs on the way
-  through a swap.
-- The Automator stub was unsigned and carried Apple's identifier with the
-  app's own name misspelled inside it. Gatekeeper rejected it. It is now a
-  signed applet with its own identifier.
-
-The swapping itself is unchanged.
+The app, the script inside it, the dialogs, the release and the Homebrew cask
+all read **3.2.0**. `build.sh` takes that number from `property scriptVersion`
+in the source rather than keeping its own copy, so the bundle cannot claim a
+version the code does not.
 
 ## Building
 
@@ -45,7 +50,10 @@ The swapping itself is unchanged.
 
 Compiles the script, installs the icon, restores the bundle identity that
 `osacompile` drops, stamps the applet's minimum macOS back to 26, signs with
-Developer ID and installs to `/Applications`. The version comes from
-`property scriptVersion` in the source.
+Developer ID and installs to `/Applications`.
 
 The icon is built from the master artwork with `pixpro_icon SwapLayers`.
+
+## License
+
+MIT. See LICENSE.

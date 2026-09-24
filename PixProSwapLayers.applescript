@@ -15,7 +15,7 @@
 -- One version number: this property is what the dialogs show, and build.sh
 -- reads it for the bundle, so the two cannot disagree.
 
-property scriptVersion : "3.2.0"
+property scriptVersion : "3.2.1"
 property kPixIDs : {"com.apple.pixelmator", "com.pixelmatorteam.pixelmator.x"}
 -- Set by pixTarget() before anything talks to Pixelmator.
 property pixApp : ""

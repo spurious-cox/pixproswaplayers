@@ -1,4 +1,4 @@
-# PixProSwapLayers 3.2.0
+# PixProSwapLayers 3.2.1
 
 Exchanges the stacking order of the selected Pixelmator Pro layers. The first
 selected layer trades places with the last, the second with the second to last,

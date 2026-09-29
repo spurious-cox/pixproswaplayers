@@ -52,7 +52,7 @@ Compiles the script, installs the icon, restores the bundle identity that
 `osacompile` drops, stamps the applet's minimum macOS back to 26, signs with
 Developer ID and installs to `/Applications`.
 
-The icon is built from the master artwork with `pixpro_icon SwapLayers`.
+The icon is the master artwork placed on Apple's 824-in-1024 macOS icon grid.
 
 ## Problems or suggestions
 

@@ -1,4 +1,4 @@
-# PixProSwapLayers 3.2.1
+# PixProSwapLayers 3.3.0
 
 Exchanges the stacking order of the selected Pixelmator Pro layers. The first
 selected layer trades places with the last, the second with the second to last,
@@ -53,6 +53,16 @@ Compiles the script, installs the icon, restores the bundle identity that
 Developer ID and installs to `/Applications`.
 
 The icon is the master artwork placed on Apple's 824-in-1024 macOS icon grid.
+
+## Updates
+
+When it opens, PixProSwapLayers asks GitHub whether a newer release exists — at most
+once a day, giving up after three seconds — and says nothing if you are up to
+date or offline. If there is a newer one, it shows as a notification:
+
+    Update available: X.Y.Z  —  brew upgrade --cask pixproswaplayers
+
+It only ever reports: nothing is downloaded and nothing replaces itself.
 
 ## Problems or suggestions
 
